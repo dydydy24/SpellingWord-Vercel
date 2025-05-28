@@ -104,12 +104,12 @@ const GameControls: React.FC<GameControlsProps> = ({
           </label>
           
           {/* Input methods grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Handwriting input */}
+          <div className="grid grid-cols-1 gap-4 justify-center">
+            {/* Handwriting input 
             <HandwritingCanvas
               onTextRecognized={handleHandwritingRecognized}
               disabled={showResult}
-            />
+            />*/}
 
             {/* Voice and text input */}
             <div className="space-y-4">
