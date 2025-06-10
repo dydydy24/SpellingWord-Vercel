@@ -177,6 +177,10 @@ const SpellingGame: React.FC<SpellingGameProps> = ({ words, onExit }) => {
     }
   };
 
+  // Handle word click from WordHistory component
+  const handleWordClick = (word: string) => {
+    speakWord(word);
+  };
   // Auto-speak current word when it changes
   useEffect(() => {
     if (currentWord && !gameState.gameComplete) {
@@ -234,7 +238,10 @@ const SpellingGame: React.FC<SpellingGameProps> = ({ words, onExit }) => {
         )}
 
         {/* Word History Section */}
-        <WordHistory wordHistory={gameState.wordHistory} />
+        <WordHistory wordHistory={gameState.wordHistory}
+         onSpeakWord={() => speakWord(currentWord)}
+         onWordClick={handleWordClick}
+        />
       </div>
     </div>
   );

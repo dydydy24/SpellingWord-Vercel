@@ -6,9 +6,11 @@ import { WordResult } from '@/types/game';
 
 interface WordHistoryProps {
   wordHistory: WordResult[];
+  onSpeakWord: () => void;
+  onWordClick: (word: string) => void; 
 }
 
-const WordHistory: React.FC<WordHistoryProps> = ({ wordHistory }) => {
+const WordHistory: React.FC<WordHistoryProps> = ({ wordHistory,onSpeakWord,onWordClick }) => {
   const correctWords = wordHistory.filter(word => word.isCorrect);
   const incorrectWords = wordHistory.filter(word => !word.isCorrect);
 
@@ -31,7 +33,7 @@ const WordHistory: React.FC<WordHistoryProps> = ({ wordHistory }) => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {correctWords.map((wordResult, index) => (
                 <div key={index} className="bg-white p-3 rounded-lg shadow-sm">
-                  <div className="font-semibold text-green-800">{wordResult.word}</div>
+                  <div className="font-semibold text-green-800" onClick={() => onWordClick(wordResult.word)} >{wordResult.word}</div>
                   {wordResult.translation && (
                     <div className="text-sm text-green-600">แปลว่า: {wordResult.translation}</div>
                   )}
@@ -55,7 +57,7 @@ const WordHistory: React.FC<WordHistoryProps> = ({ wordHistory }) => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {incorrectWords.map((wordResult, index) => (
                 <div key={index} className="bg-white p-3 rounded-lg shadow-sm">
-                  <div className="font-semibold text-red-800">{wordResult.word}</div>
+                  <div className="font-semibold text-red-800" onClick={() => onWordClick(wordResult.word)} >{wordResult.word}</div>
                   {wordResult.translation && (
                     <div className="text-sm text-red-600">แปลว่า: {wordResult.translation}</div>
                   )}
