@@ -122,6 +122,25 @@ const WordManager: React.FC<WordManagerProps> = ({ words, onWordsUpdate }) => {
     });
   };
 
+  
+  const speakWord = (word: string) => {
+    if ('speechSynthesis' in window) {
+      const utterance = new SpeechSynthesisUtterance(word);
+      utterance.lang = 'en-EN';
+      utterance.rate = 0.6;
+      utterance.pitch = 1.1;
+      speechSynthesis.speak(utterance);
+
+      
+    } else {
+      toast({
+        title: "ไม่สามารถอ่านเสียงได้",
+        description: "เบราว์เซอร์ของคุณไม่รองรับการอ่านเสียง",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <Card className="border-2 border-green-200 shadow-lg bg-white/80 backdrop-blur-sm">
       <CardHeader className="text-center pb-4">
@@ -211,7 +230,7 @@ const WordManager: React.FC<WordManagerProps> = ({ words, onWordsUpdate }) => {
                     key={index}
                     className="flex items-center justify-between bg-white p-2 rounded border"
                   >
-                    <span className="text-sm font-medium">{word}</span>
+                    <span className="text-sm font-medium" onClick={() => speakWord(word)}>{word}</span>
                     <Button
                       onClick={() => removeWord(word)}
                       size="sm"
