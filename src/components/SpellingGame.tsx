@@ -5,7 +5,8 @@ import GameComplete from './game/GameComplete';
 import GameHeader from './game/GameHeader';
 import GameControls from './game/GameControls';
 import WordHistory from './game/WordHistory';
-import { getWordTranslation } from '@/utils/wordTranslations';
+//import { getWordTranslation } from '@/utils/wordTranslations';
+import { getWordTranslation, TranslationResult } from '@/utils/translationService';
 import { GameStats, GameState, WordResult } from '@/types/game';
 
 interface SpellingGameProps {
@@ -36,9 +37,9 @@ const SpellingGame: React.FC<SpellingGameProps> = ({ words, onExit }) => {
   const speakWord = (word: string) => {
     if ('speechSynthesis' in window) {
       const utterance = new SpeechSynthesisUtterance(word);
-      utterance.lang = 'en-EN';
+      utterance.lang = 'en-US';
       utterance.rate = 0.6;
-      utterance.pitch = 1.1;
+      utterance.pitch = 1.5;
       speechSynthesis.speak(utterance);
 
       setTimeout(() => {
@@ -53,7 +54,8 @@ const SpellingGame: React.FC<SpellingGameProps> = ({ words, onExit }) => {
     }
   };
 
-  const checkSpelling = () => {
+  //const checkSpelling = () => {
+  const checkSpelling = async () => {
     if (!gameState.userInput.trim()) {
       toast({
         title: "กรุณากรอกคำตอบ",
@@ -64,7 +66,8 @@ const SpellingGame: React.FC<SpellingGameProps> = ({ words, onExit }) => {
     }
 
     const isCorrect = gameState.userInput.trim().toLowerCase() === currentWord.toLowerCase();
-    const translation = getWordTranslation(currentWord);
+    //const translation = getWordTranslation(currentWord);
+    const translation = await getWordTranslation(currentWord);
     
     // Create word result for history
     const wordResult: WordResult = {
