@@ -223,7 +223,7 @@ const WordManager: React.FC<WordManagerProps> = ({ words, onWordsUpdate }) => {
                 ดาวน์โหลด
               </Button>
             </div>
-            <div className="max-h-40 overflow-y-auto bg-gray-50 border rounded-lg p-3">
+            <div className="max-h-screen overflow-y-auto bg-gray-50 border rounded-lg p-3">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {words.map((word, index) => (
                   <div

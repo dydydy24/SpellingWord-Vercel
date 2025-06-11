@@ -20,6 +20,7 @@ interface GameControlsProps {
   onCheckSpelling: () => void;
   onNextWord: () => void;
   inputRef: React.RefObject<HTMLInputElement>; // ✅ เพิ่มบรรทัดนี้
+  onWordClick: (word: string) => void; 
 }
 
 const GameControls: React.FC<GameControlsProps> = ({
@@ -34,7 +35,8 @@ const GameControls: React.FC<GameControlsProps> = ({
   onSpeakWord,
   onCheckSpelling,
   onNextWord,
-  inputRef
+  inputRef,
+  onWordClick
 }) => {
   const {
     isListening,

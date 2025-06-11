@@ -93,12 +93,14 @@ const SpellingGame: React.FC<SpellingGameProps> = ({ words, onExit }) => {
         title: "ถูกต้อง! 🎉",
         description: `เก่งมาก! คำตอบคือ "${currentWord}"`,
       });
+      speakWord("Good job");
     } else {
       toast({
         title: "ลองใหม่นะ! 💪",
         description: `คำที่ถูกต้องคือ "${currentWord}"`,
         variant: "destructive",
       });
+      speakWord("Try again");
     }
     // ✅ หลังตรวจเสร็จ ให้ focus กลับไปที่ input
     setTimeout(() => {
@@ -224,6 +226,7 @@ const SpellingGame: React.FC<SpellingGameProps> = ({ words, onExit }) => {
           onCheckSpelling={checkSpelling}
           onNextWord={nextWord}
           inputRef={inputRef} // ✅ ส่งเข้าไป
+          onWordClick={handleWordClick}
         />
 
 {/* Show translation when answer is correct */}
