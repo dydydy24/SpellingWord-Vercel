@@ -38,7 +38,7 @@ const SpellingGame: React.FC<SpellingGameProps> = ({ words, onExit }) => {
     if ('speechSynthesis' in window) {
       const utterance = new SpeechSynthesisUtterance(word);
       utterance.lang = 'en-US';
-      utterance.rate = 0.6;
+      utterance.rate = 0.8;
       utterance.pitch = 1.5;
       speechSynthesis.speak(utterance);
 
