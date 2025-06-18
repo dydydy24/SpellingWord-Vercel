@@ -7,11 +7,65 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Plus, Save, Trash2, Edit3, Download } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { GripVertical } from 'lucide-react'; // ไอคอนสำหรับลาก
+import {
+  DndContext,
+  closestCenter,
+  DragEndEvent,
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  useSortable,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
 interface WordManagerProps {
   words: string[];
   onWordsUpdate: (words: string[]) => void;
 }
+
+// ⭐ เพิ่ม: คอมโพเนนต์ Sortable
+const SortableWordItem = ({ id, onRemove, onSpeak }: {
+  id: string;
+  onRemove: (word: string) => void;
+  onSpeak: (word: string) => void;
+}) => {
+  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      {...attributes}      
+      className="flex items-center justify-between bg-white p-2 rounded border cursor-move"
+    >
+      {/* 🎯 ใช้ไอคอนเฉพาะเป็น drag handle */}
+      <button {...listeners} className="cursor-move text-gray-400 hover:text-gray-600">
+          <GripVertical className="w-4 h-4" />
+      </button>
+      
+      <span className="text-sm font-medium" onClick={() => onSpeak(id)}>
+        {id}
+      </span>
+      
+      <Button
+        onClick={() => onRemove(id)}
+        size="sm"
+        variant="ghost"
+        className="text-red-500 hover:text-red-700 hover:bg-red-50 p-1 h-auto"
+      >
+        <Trash2 className="w-3 h-3" />
+      </Button>
+    </div>
+  );
+};
 
 const WordManager: React.FC<WordManagerProps> = ({ words, onWordsUpdate }) => {
   const [newWord, setNewWord] = useState('');
@@ -207,8 +261,8 @@ const WordManager: React.FC<WordManagerProps> = ({ words, onWordsUpdate }) => {
           </div>
         )}
 
-        {/* Current words display */}
-        {words.length > 0 && (
+{/* Current words display */}
+{words.length > 0 && (
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <Label className="text-lg font-semibold text-gray-700">
@@ -223,6 +277,58 @@ const WordManager: React.FC<WordManagerProps> = ({ words, onWordsUpdate }) => {
                 ดาวน์โหลด
               </Button>
             </div>
+
+            <div className="max-h-screen overflow-y-auto bg-gray-50 border rounded-lg p-3">
+              {/* ⭐ เปลี่ยน: ใช้ DndContext */}
+              <DndContext
+                collisionDetection={closestCenter}
+                onDragEnd={(event: DragEndEvent) => {
+                  const { active, over } = event;
+                  if (active.id !== over?.id) {
+                    const oldIndex = words.findIndex(w => w === active.id);
+                    const newIndex = words.findIndex(w => w === over?.id);
+                    const newWords = arrayMove(words, oldIndex, newIndex);
+                    onWordsUpdate(newWords);
+                  }
+                }}
+              >
+                <SortableContext
+                  items={words}
+                  strategy={verticalListSortingStrategy}
+                >
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    {words.map((word) => (
+                      <SortableWordItem
+                        key={word}
+                        id={word}
+                        onRemove={removeWord}
+                        onSpeak={speakWord}
+                      />
+                    ))}
+                  </div>
+                </SortableContext>
+              </DndContext>
+            </div>
+          </div>
+        )}
+        
+        {/* Current words display */}
+        {/*words.length > 0 && (
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <Label className="text-lg font-semibold text-gray-700">
+                คำศัพท์ปัจจุบัน ({words.length} คำ):
+              </Label>
+              <Button
+                onClick={saveWordsToFile}
+                size="sm"
+                className="bg-blue-600 hover:bg-blue-700 text-white"
+              >
+                <Download className="w-4 h-4 mr-1" />
+                ดาวน์โหลด
+              </Button>
+            </div>
+
             <div className="max-h-screen overflow-y-auto bg-gray-50 border rounded-lg p-3">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {words.map((word, index) => (
@@ -244,7 +350,8 @@ const WordManager: React.FC<WordManagerProps> = ({ words, onWordsUpdate }) => {
               </div>
             </div>
           </div>
-        )}
+        )*/}
+        
 
         {/* Save button */}
         {words.length > 0 && (

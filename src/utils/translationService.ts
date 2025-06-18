@@ -1,7 +1,7 @@
 // translationService.ts
 
 export interface TranslationResult {
-  translation: string;
+  //translation: string;
   imageUrl?: string; // ถ้ามีฐานภาพก็ใส่ logic เพิ่มเติมได้
 }
 
